@@ -1,73 +1,62 @@
-# Welcome to your Lovable project
+# 👟 Shoes Store – Modern E-Commerce Platform
 
-## Project info
+A **full-stack modern e-commerce web application** for a shoes store, built with **Next.js** and focused on **performance, scalability, and premium UI/UX**.  
+Inspired by leading brands like **Nike** and **Adidas**, this project delivers a complete shopping experience with admin management capabilities.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+---
 
-## How can I edit this code?
+## ✨ Features
 
-There are several ways of editing your application.
+### 🛍️ Customer Features
+- User registration & login
+- Secure authentication & authorization
+- Product browsing with filters & sorting
+- Product details with image gallery
+- Size selection & stock validation
+- Shopping cart (persistent)
+- Wishlist
+- Checkout flow with discount codes
+- Order history & order tracking
+- Product reviews & ratings (verified buyers only)
+- Light mode / Dark mode
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+### 🧑‍💼 Admin Features
+- Secure admin dashboard
+- Role-based access control
+- Product management (CRUD)
+- Size & stock management
+- Order management (status updates)
+- User management
+- Discount / coupon management
+- Sales & user analytics
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🧱 Tech Stack
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Frontend & Backend
+- **Next.js** (App Router)
+- **React**
+- **Tailwind CSS** (or equivalent modern styling)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Authentication & Security
+- Secure authentication (JWT or session-based)
+- Password hashing
+- Protected routes & middleware authorization
 
-Follow these steps:
+### Database
+- Relational or document-based database
+- Indexed and optimized queries
+- Proper entity relationships
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Other
+- Server-Side Rendering (SEO friendly)
+- Image optimization
+- Responsive & mobile-first design
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🗂️ Project Structure (High Level)
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)

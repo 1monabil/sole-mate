@@ -1,8 +1,17 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Heart, ShoppingBag, Menu, X } from 'lucide-react';
+import { Search, Heart, ShoppingBag, Menu, X, User, LogOut, Shield } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store/useStore';
+import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -15,8 +24,13 @@ export const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { getCartCount, wishlist } = useStore();
+  const { user, isAdmin, signOut } = useAuth();
   const cartCount = getCartCount();
   const wishlistCount = wishlist.length;
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass">
@@ -73,6 +87,53 @@ export const Navbar = () => {
             )}
           </Link>
 
+          {/* User Menu */}
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                  <User className="w-5 h-5" />
+                  {isAdmin && (
+                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full" />
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <div className="px-2 py-1.5 text-sm font-medium">
+                  {user.email}
+                </div>
+                <DropdownMenuSeparator />
+                {isAdmin && (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin" className="flex items-center gap-2 cursor-pointer">
+                        <Shield className="w-4 h-4" />
+                        Admin Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                <DropdownMenuItem
+                  onClick={handleSignOut}
+                  className="flex items-center gap-2 cursor-pointer text-destructive"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link to="/auth">
+              <Button variant="default" size="sm" className="hidden sm:flex">
+                Sign In
+              </Button>
+              <Button variant="ghost" size="icon" className="sm:hidden">
+                <User className="w-5 h-5" />
+              </Button>
+            </Link>
+          )}
+
           {/* Mobile Menu Toggle */}
           <button
             className="p-2 md:hidden"
@@ -108,6 +169,24 @@ export const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
+              {!user && (
+                <Link
+                  to="/auth"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-lg font-medium py-2 text-primary"
+                >
+                  Sign In
+                </Link>
+              )}
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-lg font-medium py-2 text-primary"
+                >
+                  Admin Dashboard
+                </Link>
+              )}
             </div>
           </motion.div>
         )}

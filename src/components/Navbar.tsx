@@ -103,6 +103,12 @@ export const Navbar = () => {
                   {user.email}
                 </div>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
+                    <User className="w-4 h-4" />
+                    My Profile
+                  </Link>
+                </DropdownMenuItem>
                 {isAdmin && (
                   <>
                     <DropdownMenuItem asChild>
@@ -111,9 +117,9 @@ export const Navbar = () => {
                         Admin Dashboard
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
                   </>
                 )}
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={handleSignOut}
                   className="flex items-center gap-2 cursor-pointer text-destructive"
@@ -176,6 +182,15 @@ export const Navbar = () => {
                   className="text-lg font-medium py-2 text-primary"
                 >
                   Sign In
+                </Link>
+              )}
+              {user && (
+                <Link
+                  to="/profile"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-lg font-medium py-2 text-muted-foreground"
+                >
+                  My Profile
                 </Link>
               )}
               {isAdmin && (

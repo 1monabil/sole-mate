@@ -38,6 +38,7 @@ interface StoreState {
   clearCart: () => void;
   addToWishlist: (product: Product) => void;
   removeFromWishlist: (productId: string) => void;
+  clearWishlist: () => void;
   isInWishlist: (productId: string) => boolean;
   getCartTotal: () => number;
   getCartCount: () => number;
@@ -112,6 +113,8 @@ export const useStore = create<StoreState>()(
           wishlist: state.wishlist.filter((item) => item.product.id !== productId),
         }));
       },
+
+      clearWishlist: () => set({ wishlist: [] }),
 
       isInWishlist: (productId) => {
         return get().wishlist.some((item) => item.product.id === productId);

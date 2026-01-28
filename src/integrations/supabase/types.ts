@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      cart_items: {
+        Row: {
+          created_at: string
+          id: string
+          product_data: Json
+          product_id: string
+          quantity: number
+          size: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_data: Json
+          product_id: string
+          quantity?: number
+          size: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_data?: Json
+          product_id?: string
+          quantity?: number
+          size?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       discounts: {
         Row: {
           code: string
@@ -253,6 +286,30 @@ export type Database = {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wishlist_items: {
+        Row: {
+          created_at: string
+          id: string
+          product_data: Json
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_data: Json
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_data?: Json
+          product_id?: string
           user_id?: string
         }
         Relationships: []

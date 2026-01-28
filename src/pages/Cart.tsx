@@ -1,15 +1,30 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { useStore } from '@/store/useStore';
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
+import { useDiscount } from '@/hooks/useDiscount';
+import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, X, Loader2, Tag } from 'lucide-react';
 
 const Cart = () => {
   const { cart, removeFromCart, updateCartQuantity, getCartTotal, clearCart } = useStore();
-  const total = getCartTotal();
-  const shipping = total > 100 ? 0 : 10;
-  const finalTotal = total + shipping;
+  const { isValidating, error, appliedDiscount, validateDiscount, clearDiscount } = useDiscount();
+  const [discountCode, setDiscountCode] = useState('');
+  
+  const subtotal = getCartTotal();
+  const shipping = subtotal > 100 ? 0 : 10;
+  const discountAmount = appliedDiscount?.calculatedDiscount ?? 0;
+  const finalTotal = subtotal + shipping - discountAmount;
+
+  const handleApplyDiscount = async () => {
+    await validateDiscount(discountCode, subtotal);
+  };
+
+  const handleRemoveDiscount = () => {
+    clearDiscount();
+    setDiscountCode('');
+  };
 
   if (cart.length === 0) {
     return (
@@ -158,7 +173,7 @@ const Cart = () => {
               <div className="space-y-4 pb-6 border-b border-border">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-medium">${total.toFixed(2)}</span>
+                  <span className="font-medium">${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Shipping</span>
@@ -166,6 +181,15 @@ const Cart = () => {
                     {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
                   </span>
                 </div>
+                {appliedDiscount && (
+                  <div className="flex justify-between text-green-600">
+                    <span className="flex items-center gap-2">
+                      <Tag className="w-4 h-4" />
+                      Discount ({appliedDiscount.code})
+                    </span>
+                    <span className="font-medium">-${discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-between py-6 border-b border-border">
@@ -175,16 +199,49 @@ const Cart = () => {
 
               {/* Discount Code */}
               <div className="py-6 border-b border-border">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Discount code"
-                    className="flex-1 px-4 py-3 rounded-lg bg-secondary border-none text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <button className="px-4 py-3 rounded-lg bg-secondary font-medium text-sm hover:bg-secondary/80 transition-colors">
-                    Apply
-                  </button>
-                </div>
+                {appliedDiscount ? (
+                  <div className="flex items-center justify-between p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+                    <div className="flex items-center gap-2 text-green-600">
+                      <Tag className="w-4 h-4" />
+                      <span className="font-medium">{appliedDiscount.code}</span>
+                      <span className="text-sm">
+                        ({appliedDiscount.discountType === 'percentage' 
+                          ? `${appliedDiscount.discountValue}% off` 
+                          : `$${appliedDiscount.discountValue} off`})
+                      </span>
+                    </div>
+                    <button 
+                      onClick={handleRemoveDiscount}
+                      className="p-1 hover:text-destructive transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Discount code"
+                        value={discountCode}
+                        onChange={(e) => setDiscountCode(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleApplyDiscount()}
+                        className="flex-1 px-4 py-3 rounded-lg bg-secondary border-none text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                      <button 
+                        onClick={handleApplyDiscount}
+                        disabled={isValidating}
+                        className="px-4 py-3 rounded-lg bg-secondary font-medium text-sm hover:bg-secondary/80 transition-colors disabled:opacity-50 flex items-center gap-2"
+                      >
+                        {isValidating && <Loader2 className="w-4 h-4 animate-spin" />}
+                        Apply
+                      </button>
+                    </div>
+                    {error && (
+                      <p className="text-destructive text-sm">{error}</p>
+                    )}
+                  </div>
+                )}
               </div>
 
               <Link to="/checkout" className="btn-primary w-full text-center block mt-6">

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { useStore } from '@/store/useStore';
 
 interface AuthContextType {
   user: User | null;
@@ -90,6 +91,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async () => {
     await supabase.auth.signOut();
     setIsAdmin(false);
+    // Clear cart and wishlist on logout
+    useStore.getState().clearCart();
+    useStore.getState().clearWishlist();
   };
 
   return (

@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ProductCard } from '@/components/ProductCard';
-import { products, categories } from '@/data/products';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { useProducts } from '@/hooks/useProducts';
+import { SlidersHorizontal, X, Loader2 } from 'lucide-react';
 
 const sortOptions = [
   { value: 'newest', label: 'Newest' },
@@ -14,10 +14,11 @@ const sortOptions = [
 ];
 
 const Products = () => {
+  const { products, categories, isLoading, error } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('newest');
   const [showFilters, setShowFilters] = useState(false);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 300]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
 
   const filteredProducts = useMemo(() => {
     let result = [...products];
@@ -42,12 +43,41 @@ const Products = () => {
         result.sort((a, b) => b.reviews - a.reviews);
         break;
       default:
-        // newest - keep original order or sort by isNew
-        result.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
+        // newest - keep original order (already sorted by created_at desc)
+        break;
     }
 
     return result;
-  }, [selectedCategory, sortBy, priceRange]);
+  }, [products, selectedCategory, sortBy, priceRange]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen">
+        <Navbar />
+        <main className="pt-24 pb-16 flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="w-10 h-10 animate-spin text-primary" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen">
+        <Navbar />
+        <main className="pt-24 pb-16 flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <p className="text-destructive mb-4">{error}</p>
+            <button onClick={() => window.location.reload()} className="btn-primary">
+              Try Again
+            </button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -137,7 +167,7 @@ const Products = () => {
                 <input
                   type="range"
                   min="0"
-                  max="300"
+                  max="500"
                   value={priceRange[1]}
                   onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                   className="w-full accent-primary"
@@ -160,7 +190,7 @@ const Products = () => {
               <button
                 onClick={() => {
                   setSelectedCategory('All');
-                  setPriceRange([0, 300]);
+                  setPriceRange([0, 500]);
                 }}
                 className="mt-4 btn-secondary"
               >

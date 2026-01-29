@@ -1,11 +1,26 @@
 import { motion } from 'framer-motion';
 import { ProductCard } from './ProductCard';
-import { products } from '@/data/products';
+import { useProducts } from '@/hooks/useProducts';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 
 export const FeaturedProducts = () => {
+  const { products, isLoading } = useProducts();
   const featuredProducts = products.slice(0, 4);
+
+  if (isLoading) {
+    return (
+      <section className="py-24 bg-background">
+        <div className="container flex justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </section>
+    );
+  }
+
+  if (featuredProducts.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-24 bg-background">

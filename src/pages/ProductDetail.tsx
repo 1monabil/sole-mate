@@ -1,20 +1,75 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ProductReviews } from '@/components/ProductReviews';
-import { products } from '@/data/products';
-import { useStore } from '@/store/useStore';
-import { Heart, Minus, Plus, ChevronLeft, Truck, Shield, RefreshCw } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useStore, Product } from '@/store/useStore';
+import { Heart, Minus, Plus, ChevronLeft, Truck, Shield, RefreshCw, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const product = products.find((p) => p.id === id);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useStore();
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!id) return;
+
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('id', id)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (data) {
+          setProduct({
+            id: data.id,
+            name: data.name,
+            brand: data.brand,
+            price: Number(data.price),
+            originalPrice: data.original_price ? Number(data.original_price) : undefined,
+            image: data.image_url || '/placeholder.svg',
+            category: data.category,
+            sizes: Array.isArray(data.sizes) ? (data.sizes as number[]) : [],
+            colors: Array.isArray(data.colors) ? (data.colors as string[]) : [],
+            isNew: data.is_new || false,
+            isSale: data.is_sale || false,
+            rating: Number(data.rating) || 0,
+            reviews: data.reviews_count || 0,
+            description: data.description || '',
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching product:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen">
+        <Navbar />
+        <main className="pt-24 pb-16 flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="w-10 h-10 animate-spin text-primary" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!product) {
     return (

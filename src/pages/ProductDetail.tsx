@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { ProductReviews } from '@/components/ProductReviews';
 import { products } from '@/data/products';
 import { useStore } from '@/store/useStore';
 import { Heart, Minus, Plus, ChevronLeft, Truck, Shield, RefreshCw } from 'lucide-react';
@@ -208,6 +209,11 @@ const ProductDetail = () => {
                 </div>
               </div>
             </motion.div>
+          </div>
+
+          {/* Reviews Section */}
+          <div className="mt-16 pt-16 border-t border-border">
+            <ProductReviews productId={product.id} />
           </div>
         </div>
       </main>

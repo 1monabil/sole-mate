@@ -111,6 +111,42 @@ export const useCheckout = () => {
         }
       }
 
+      // Send order confirmation email
+      try {
+        const emailPayload = {
+          orderId: order.id,
+          email: shippingAddress.email,
+          customerName: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+          items: orderItems.map((item) => ({
+            product_name: item.product_name,
+            quantity: item.quantity,
+            price_at_purchase: item.price_at_purchase,
+            size: item.size,
+            product_image: item.product_image,
+          })),
+          subtotal,
+          discountAmount: discountAmount > 0 ? discountAmount : undefined,
+          discountCode: discountCode || undefined,
+          totalAmount,
+          shippingAddress,
+        };
+
+        const { error: emailError } = await supabase.functions.invoke(
+          'send-order-confirmation',
+          { body: emailPayload }
+        );
+
+        if (emailError) {
+          console.error('Failed to send confirmation email:', emailError);
+          // Don't fail the order if email fails
+        } else {
+          console.log('Order confirmation email sent successfully');
+        }
+      } catch (emailErr) {
+        console.error('Email sending error:', emailErr);
+        // Don't fail the order if email fails
+      }
+
       // Clear the cart
       clearCart();
 

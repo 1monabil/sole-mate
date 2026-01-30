@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -14,6 +15,8 @@ const sortOptions = [
 ];
 
 const Products = () => {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search') || '';
   const { products, categories, isLoading, error } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('newest');
@@ -22,6 +25,17 @@ const Products = () => {
 
   const filteredProducts = useMemo(() => {
     let result = [...products];
+
+    // Filter by search query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query) ||
+          p.brand.toLowerCase().includes(query) ||
+          p.category.toLowerCase().includes(query)
+      );
+    }
 
     // Filter by category
     if (selectedCategory !== 'All') {
@@ -48,7 +62,7 @@ const Products = () => {
     }
 
     return result;
-  }, [products, selectedCategory, sortBy, priceRange]);
+  }, [products, selectedCategory, sortBy, priceRange, searchQuery]);
 
   if (isLoading) {
     return (

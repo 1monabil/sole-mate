@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Heart, ShoppingBag, Menu, X, User, LogOut, Shield } from 'lucide-react';
+import { Heart, ShoppingBag, Menu, X, User, LogOut, Shield } from 'lucide-react';
+import { ProductSearch } from '@/components/ProductSearch';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store/useStore';
@@ -57,9 +58,7 @@ export const Navbar = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          <button className="p-2 hover:text-primary transition-colors" aria-label="Search">
-            <Search className="w-5 h-5" />
-          </button>
+          <ProductSearch />
 
           <Link
             to="/wishlist"

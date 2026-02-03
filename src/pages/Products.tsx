@@ -17,11 +17,34 @@ const sortOptions = [
 const Products = () => {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
+  const filterParam = searchParams.get('filter') || '';
+  const categoryParam = searchParams.get('category') || '';
+  
   const { products, categories, isLoading, error } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('newest');
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+  const [activeFilter, setActiveFilter] = useState<'new' | 'sale' | ''>('');
+
+  // Sync URL params with state
+  useEffect(() => {
+    if (filterParam === 'new' || filterParam === 'sale') {
+      setActiveFilter(filterParam);
+      setSelectedCategory('All');
+    } else {
+      setActiveFilter('');
+    }
+    
+    if (categoryParam) {
+      // Capitalize first letter to match category names
+      const formattedCategory = categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1).toLowerCase();
+      setSelectedCategory(formattedCategory);
+      setActiveFilter('');
+    } else if (!filterParam) {
+      setSelectedCategory('All');
+    }
+  }, [filterParam, categoryParam]);
 
   const filteredProducts = useMemo(() => {
     let result = [...products];
@@ -37,9 +60,16 @@ const Products = () => {
       );
     }
 
+    // Filter by active filter (new arrivals or sale)
+    if (activeFilter === 'new') {
+      result = result.filter((p) => p.isNew);
+    } else if (activeFilter === 'sale') {
+      result = result.filter((p) => p.isSale);
+    }
+
     // Filter by category
     if (selectedCategory !== 'All') {
-      result = result.filter((p) => p.category === selectedCategory);
+      result = result.filter((p) => p.category.toLowerCase() === selectedCategory.toLowerCase());
     }
 
     // Filter by price
@@ -62,7 +92,7 @@ const Products = () => {
     }
 
     return result;
-  }, [products, selectedCategory, sortBy, priceRange, searchQuery]);
+  }, [products, selectedCategory, sortBy, priceRange, searchQuery, activeFilter]);
 
   if (isLoading) {
     return (

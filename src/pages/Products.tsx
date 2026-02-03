@@ -274,7 +274,7 @@ const Products = () => {
         </div>
       </main>
       <Footer />
-    </div>
+    </PageTransition>
   );
 };
 

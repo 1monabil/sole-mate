@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ProductReviews } from '@/components/ProductReviews';
+import { PageTransition } from '@/components/PageTransition';
 import { supabase } from '@/integrations/supabase/client';
 import { useStore, Product } from '@/store/useStore';
 import { Heart, Minus, Plus, ChevronLeft, Truck, Shield, RefreshCw, Loader2 } from 'lucide-react';

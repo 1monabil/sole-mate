@@ -5,10 +5,11 @@ import { Categories } from '@/components/Categories';
 import { Features } from '@/components/Features';
 import { Newsletter } from '@/components/Newsletter';
 import { Footer } from '@/components/Footer';
+import { PageTransition } from '@/components/PageTransition';
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <PageTransition className="min-h-screen">
       <Navbar />
       <main>
         <Hero />
@@ -18,7 +19,7 @@ const Index = () => {
         <Newsletter />
       </main>
       <Footer />
-    </div>
+    </PageTransition>
   );
 };
 

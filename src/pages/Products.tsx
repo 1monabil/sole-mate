@@ -5,6 +5,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ProductCard } from '@/components/ProductCard';
 import { useProducts } from '@/hooks/useProducts';
+import { PageTransition } from '@/components/PageTransition';
 import { SlidersHorizontal, X, Loader2 } from 'lucide-react';
 
 const sortOptions = [
@@ -124,7 +125,7 @@ const Products = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <PageTransition className="min-h-screen">
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">
@@ -273,7 +274,7 @@ const Products = () => {
         </div>
       </main>
       <Footer />
-    </div>
+    </PageTransition>
   );
 };
 

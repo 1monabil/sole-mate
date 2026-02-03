@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ProductReviews } from '@/components/ProductReviews';
+import { PageTransition } from '@/components/PageTransition';
 import { supabase } from '@/integrations/supabase/client';
 import { useStore, Product } from '@/store/useStore';
 import { Heart, Minus, Plus, ChevronLeft, Truck, Shield, RefreshCw, Loader2 } from 'lucide-react';
@@ -106,7 +107,7 @@ const ProductDetail = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <PageTransition className="min-h-screen">
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">
@@ -273,7 +274,7 @@ const ProductDetail = () => {
         </div>
       </main>
       <Footer />
-    </div>
+    </PageTransition>
   );
 };
 

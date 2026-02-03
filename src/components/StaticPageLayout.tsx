@@ -1,5 +1,6 @@
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { PageTransition } from '@/components/PageTransition';
 
 interface StaticPageLayoutProps {
   title: string;
@@ -8,7 +9,7 @@ interface StaticPageLayoutProps {
 
 export const StaticPageLayout = ({ title, children }: StaticPageLayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <PageTransition className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 pt-24 pb-16">
         <div className="container">
@@ -17,6 +18,6 @@ export const StaticPageLayout = ({ title, children }: StaticPageLayoutProps) => 
         </div>
       </main>
       <Footer />
-    </div>
+    </PageTransition>
   );
 };

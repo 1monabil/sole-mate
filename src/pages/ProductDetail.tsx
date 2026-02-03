@@ -107,7 +107,7 @@ const ProductDetail = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <PageTransition className="min-h-screen">
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">

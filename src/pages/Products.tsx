@@ -17,11 +17,34 @@ const sortOptions = [
 const Products = () => {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
+  const filterParam = searchParams.get('filter') || '';
+  const categoryParam = searchParams.get('category') || '';
+  
   const { products, categories, isLoading, error } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('newest');
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+  const [activeFilter, setActiveFilter] = useState<'new' | 'sale' | ''>('');
+
+  // Sync URL params with state
+  useEffect(() => {
+    if (filterParam === 'new' || filterParam === 'sale') {
+      setActiveFilter(filterParam);
+      setSelectedCategory('All');
+    } else {
+      setActiveFilter('');
+    }
+    
+    if (categoryParam) {
+      // Capitalize first letter to match category names
+      const formattedCategory = categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1).toLowerCase();
+      setSelectedCategory(formattedCategory);
+      setActiveFilter('');
+    } else if (!filterParam) {
+      setSelectedCategory('All');
+    }
+  }, [filterParam, categoryParam]);
 
   const filteredProducts = useMemo(() => {
     let result = [...products];
@@ -37,9 +60,16 @@ const Products = () => {
       );
     }
 
+    // Filter by active filter (new arrivals or sale)
+    if (activeFilter === 'new') {
+      result = result.filter((p) => p.isNew);
+    } else if (activeFilter === 'sale') {
+      result = result.filter((p) => p.isSale);
+    }
+
     // Filter by category
     if (selectedCategory !== 'All') {
-      result = result.filter((p) => p.category === selectedCategory);
+      result = result.filter((p) => p.category.toLowerCase() === selectedCategory.toLowerCase());
     }
 
     // Filter by price
@@ -62,7 +92,7 @@ const Products = () => {
     }
 
     return result;
-  }, [products, selectedCategory, sortBy, priceRange, searchQuery]);
+  }, [products, selectedCategory, sortBy, priceRange, searchQuery, activeFilter]);
 
   if (isLoading) {
     return (
@@ -105,12 +135,32 @@ const Products = () => {
             className="mb-8"
           >
             <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
-              All Products
+              {activeFilter === 'new' ? 'New Arrivals' : activeFilter === 'sale' ? 'Sale Items' : selectedCategory !== 'All' ? selectedCategory : 'All Products'}
             </h1>
             <p className="text-muted-foreground">
               {filteredProducts.length} products found
             </p>
           </motion.div>
+
+          {/* Active Filter Badge */}
+          {(activeFilter || selectedCategory !== 'All') && (
+            <div className="flex items-center gap-2 mb-6">
+              <span className="text-sm text-muted-foreground">Active filter:</span>
+              <span className="px-3 py-1 rounded-full bg-primary text-primary-foreground text-sm font-medium">
+                {activeFilter === 'new' ? 'New Arrivals' : activeFilter === 'sale' ? 'Sale' : selectedCategory}
+              </span>
+              <button
+                onClick={() => {
+                  setActiveFilter('');
+                  setSelectedCategory('All');
+                  window.history.pushState({}, '', '/products');
+                }}
+                className="p-1 hover:bg-secondary rounded-full transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
 
           {/* Filters Bar */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-4 border-b border-border">
@@ -119,9 +169,17 @@ const Products = () => {
               {categories.map((category) => (
                 <button
                   key={category}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setActiveFilter('');
+                    if (category === 'All') {
+                      window.history.pushState({}, '', '/products');
+                    } else {
+                      window.history.pushState({}, '', `/products?category=${category.toLowerCase()}`);
+                    }
+                  }}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    selectedCategory === category
+                    selectedCategory === category && !activeFilter
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                   }`}

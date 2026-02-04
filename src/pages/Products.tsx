@@ -6,7 +6,8 @@ import { Footer } from '@/components/Footer';
 import { ProductCard } from '@/components/ProductCard';
 import { useProducts } from '@/hooks/useProducts';
 import { PageTransition } from '@/components/PageTransition';
-import { SlidersHorizontal, X, Loader2 } from 'lucide-react';
+import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import { SlidersHorizontal, X } from 'lucide-react';
 
 const sortOptions = [
   { value: 'newest', label: 'Newest' },
@@ -95,17 +96,6 @@ const Products = () => {
     return result;
   }, [products, selectedCategory, sortBy, priceRange, searchQuery, activeFilter]);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen">
-        <Navbar />
-        <main className="pt-24 pb-16 flex items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-10 h-10 animate-spin text-primary" />
-        </main>
-        <Footer />
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -251,9 +241,13 @@ const Products = () => {
 
           {/* Products Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
-            ))}
+            {isLoading ? (
+              <ProductGridSkeleton count={8} />
+            ) : (
+              filteredProducts.map((product, index) => (
+                <ProductCard key={product.id} product={product} index={index} />
+              ))
+            )}
           </div>
 
           {/* Empty State */}

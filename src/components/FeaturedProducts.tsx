@@ -2,23 +2,14 @@ import { motion } from 'framer-motion';
 import { ProductCard } from './ProductCard';
 import { useProducts } from '@/hooks/useProducts';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { ProductGridSkeleton } from './ProductCardSkeleton';
 
 export const FeaturedProducts = () => {
   const { products, isLoading } = useProducts();
   const featuredProducts = products.slice(0, 4);
 
-  if (isLoading) {
-    return (
-      <section className="py-24 bg-background">
-        <div className="container flex justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
-      </section>
-    );
-  }
-
-  if (featuredProducts.length === 0) {
+  if (!isLoading && featuredProducts.length === 0) {
     return null;
   }
 
@@ -49,9 +40,13 @@ export const FeaturedProducts = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
-          ))}
+          {isLoading ? (
+            <ProductGridSkeleton count={4} />
+          ) : (
+            featuredProducts.map((product, index) => (
+              <ProductCard key={product.id} product={product} index={index} />
+            ))
+          )}
         </div>
       </div>
     </section>

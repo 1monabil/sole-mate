@@ -1,6 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export interface AppliedDiscount {
+  code: string;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number;
+  calculatedDiscount: number;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -32,6 +39,7 @@ export interface WishlistItem {
 interface StoreState {
   cart: CartItem[];
   wishlist: WishlistItem[];
+  appliedDiscount: AppliedDiscount | null;
   addToCart: (product: Product, size: number, quantity?: number) => void;
   removeFromCart: (productId: string, size: number) => void;
   updateCartQuantity: (productId: string, size: number, quantity: number) => void;
@@ -42,6 +50,8 @@ interface StoreState {
   isInWishlist: (productId: string) => boolean;
   getCartTotal: () => number;
   getCartCount: () => number;
+  setAppliedDiscount: (discount: AppliedDiscount | null) => void;
+  clearAppliedDiscount: () => void;
 }
 
 export const useStore = create<StoreState>()(
@@ -49,6 +59,7 @@ export const useStore = create<StoreState>()(
     (set, get) => ({
       cart: [],
       wishlist: [],
+      appliedDiscount: null,
 
       addToCart: (product, size, quantity = 1) => {
         set((state) => {
@@ -95,7 +106,7 @@ export const useStore = create<StoreState>()(
         }));
       },
 
-      clearCart: () => set({ cart: [] }),
+      clearCart: () => set({ cart: [], appliedDiscount: null }),
 
       addToWishlist: (product) => {
         set((state) => {
@@ -130,6 +141,10 @@ export const useStore = create<StoreState>()(
       getCartCount: () => {
         return get().cart.reduce((count, item) => count + item.quantity, 0);
       },
+
+      setAppliedDiscount: (discount) => set({ appliedDiscount: discount }),
+
+      clearAppliedDiscount: () => set({ appliedDiscount: null }),
     }),
     {
       name: 'stride-store',

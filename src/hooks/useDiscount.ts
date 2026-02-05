@@ -1,17 +1,13 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useStore, AppliedDiscount } from '@/store/useStore';
 
-export interface DiscountResult {
-  code: string;
-  discountType: 'percentage' | 'fixed';
-  discountValue: number;
-  calculatedDiscount: number;
-}
+export type DiscountResult = AppliedDiscount;
 
 export const useDiscount = () => {
   const [isValidating, setIsValidating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [appliedDiscount, setAppliedDiscount] = useState<DiscountResult | null>(null);
+  const { appliedDiscount, setAppliedDiscount, clearAppliedDiscount } = useStore();
 
   const validateDiscount = async (code: string, subtotal: number): Promise<DiscountResult | null> => {
     if (!code.trim()) {
@@ -84,7 +80,7 @@ export const useDiscount = () => {
   };
 
   const clearDiscount = () => {
-    setAppliedDiscount(null);
+    clearAppliedDiscount();
     setError(null);
   };
 

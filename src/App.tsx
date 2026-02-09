@@ -20,6 +20,7 @@ import AdminProducts from "./pages/admin/Products";
 import AdminOrders from "./pages/admin/Orders";
 import AdminUsers from "./pages/admin/Users";
 import AdminDiscounts from "./pages/admin/Discounts";
+import Orders from "./pages/Orders";
 import NotFound from "./pages/NotFound";
 // Static pages
 import Contact from "./pages/Contact";

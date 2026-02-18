@@ -8,25 +8,25 @@
 
 @layer base {
   :root {
-    /* Core Colors - Light Premium Theme */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
+    /* Core Colors - Warm Cream Light Theme */
+    --background: 30 25% 97%;
+    --foreground: 25 15% 10%;
 
-    --card: 0 0% 98%;
-    --card-foreground: 0 0% 5%;
+    --card: 30 20% 95%;
+    --card-foreground: 25 15% 10%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover: 30 25% 97%;
+    --popover-foreground: 25 15% 10%;
 
     /* Electric Orange Accent */
     --primary: 24 100% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 30 15% 92%;
+    --secondary-foreground: 25 15% 15%;
 
-    --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 30 12% 90%;
+    --muted-foreground: 25 8% 45%;
 
     --accent: 24 100% 50%;
     --accent-foreground: 0 0% 100%;
@@ -34,8 +34,8 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
+    --border: 30 15% 87%;
+    --input: 30 15% 87%;
     --ring: 24 100% 50%;
 
     --radius: 0.5rem;
@@ -45,13 +45,13 @@
     --glow-subtle: 0 0 60px hsl(0 0% 0% / 0.03);
     
     /* Sidebar */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 10%;
+    --sidebar-background: 30 20% 95%;
+    --sidebar-foreground: 25 15% 15%;
     --sidebar-primary: 24 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 94%;
-    --sidebar-accent-foreground: 0 0% 10%;
-    --sidebar-border: 0 0% 90%;
+    --sidebar-accent: 30 12% 90%;
+    --sidebar-accent-foreground: 25 15% 15%;
+    --sidebar-border: 30 15% 87%;
     --sidebar-ring: 24 100% 50%;
   }
 

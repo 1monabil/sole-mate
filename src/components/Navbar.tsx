@@ -39,7 +39,14 @@ export const Navbar = () => {
       <nav className="container mx-auto flex items-center justify-between py-4">
         {/* Logo */}
         <Link to="/" className="text-2xl font-black tracking-tighter">
-          STRIDE
+          <motion.span
+            initial={{ opacity: 0, x: -20, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="inline-block"
+          >
+            STRIDE
+          </motion.span>
         </Link>
 
         {/* Desktop Navigation */}

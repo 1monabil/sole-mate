@@ -25,6 +25,7 @@ const navLinks = [
 export const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLogoHovered, setIsLogoHovered] = useState(false);
   const { getCartCount, wishlist } = useStore();
   const { user, isAdmin, signOut } = useAuth();
   const cartCount = getCartCount();
@@ -38,16 +39,23 @@ export const Navbar = () => {
     <header className="fixed top-0 left-0 right-0 z-50 glass">
       <nav className="container mx-auto flex items-center justify-between py-4">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-black tracking-tighter">
+        <Link
+          to="/"
+          className="text-2xl font-black tracking-tighter"
+          onMouseEnter={() => setIsLogoHovered(prev => !prev)}
+        >
           <span className="inline-flex">
             {'STRIDE'.split('').map((letter, i) => (
               <motion.span
                 key={i}
+                animate={isLogoHovered
+                  ? { y: [0, -6, 0], filter: ['blur(0px)', 'blur(2px)', 'blur(0px)'] }
+                  : { opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0 }
+                }
                 initial={{ opacity: 0, y: 12, filter: 'blur(8px)', rotateX: -90 }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0 }}
                 transition={{
-                  duration: 0.5,
-                  delay: i * 0.08,
+                  duration: 0.4,
+                  delay: i * 0.06,
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 className="inline-block"

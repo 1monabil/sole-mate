@@ -42,17 +42,17 @@ export const Navbar = () => {
         <Link
           to="/"
           className="text-2xl font-black tracking-tighter"
-          onMouseEnter={() => setIsLogoHovered(prev => !prev)}
+          onMouseEnter={() => setLogoHoverKey(k => k + 1)}
         >
           <span className="inline-flex">
             {'STRIDE'.split('').map((letter, i) => (
               <motion.span
-                key={i}
-                animate={isLogoHovered
-                  ? { y: [0, -6, 0], filter: ['blur(0px)', 'blur(2px)', 'blur(0px)'] }
-                  : { opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0 }
+                key={`${i}-${logoHoverKey}`}
+                initial={logoHoverKey === 0 
+                  ? { opacity: 0, y: 12, filter: 'blur(8px)', rotateX: -90 }
+                  : { y: -6, filter: 'blur(2px)' }
                 }
-                initial={{ opacity: 0, y: 12, filter: 'blur(8px)', rotateX: -90 }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0 }}
                 transition={{
                   duration: 0.4,
                   delay: i * 0.06,

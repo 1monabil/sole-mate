@@ -25,7 +25,7 @@ const navLinks = [
 export const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLogoHovered, setIsLogoHovered] = useState(false);
+  const [logoHoverKey, setLogoHoverKey] = useState(0);
   const { getCartCount, wishlist } = useStore();
   const { user, isAdmin, signOut } = useAuth();
   const cartCount = getCartCount();
